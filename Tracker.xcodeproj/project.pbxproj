@@ -92,10 +92,10 @@
 		05F465722B2839FD000D58DC = {
 			isa = PBXGroup;
 			children = (
-				05F465B82B283D49000D58DC /* Extension */,
+				05F465B82B283D49000D58DC /* Extension and UiColors */,
 				05F465A52B283C55000D58DC /* Components */,
 				05F465A02B283C10000D58DC /* Statistic */,
-				05F4657D2B2839FD000D58DC /* Tracker */,
+				05F4657D2B2839FD000D58DC /* TrackerCell */,
 				05F4657C2B2839FD000D58DC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -108,7 +108,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		05F4657D2B2839FD000D58DC /* Tracker */ = {
+		05F4657D2B2839FD000D58DC /* TrackerCell */ = {
 			isa = PBXGroup;
 			children = (
 				05F4657E2B2839FD000D58DC /* AppDelegate.swift */,
@@ -128,7 +128,7 @@
 				05F465C52B283E3A000D58DC /* ScheduleViewController.swift */,
 				05F465C72B283E4D000D58DC /* WeekDayCell.swift */,
 			);
-			path = Tracker;
+			path = TrackerCell;
 			sourceTree = "<group>";
 		};
 		05F465A02B283C10000D58DC /* Statistic */ = {
@@ -156,7 +156,7 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		05F465B82B283D49000D58DC /* Extension */ = {
+		05F465B82B283D49000D58DC /* Extension and UiColors */ = {
 			isa = PBXGroup;
 			children = (
 				05F465B92B283D7F000D58DC /* TrackerCategoryExtension.swift */,
@@ -166,7 +166,7 @@
 				05F465C12B283DEC000D58DC /* TrackerExtension.swift */,
 				05F465C32B283E0A000D58DC /* IntExtension.swift */,
 			);
-			path = Extension;
+			path = "Extension and UiColors";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
