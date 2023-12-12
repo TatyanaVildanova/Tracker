@@ -94,7 +94,7 @@
 			children = (
 				05F465B82B283D49000D58DC /* Extension and UiColors */,
 				05F465A52B283C55000D58DC /* Components */,
-				05F465A02B283C10000D58DC /* Statistic */,
+				05F465A02B283C10000D58DC /* Helper */,
 				05F4657D2B2839FD000D58DC /* TrackerCell */,
 				05F4657C2B2839FD000D58DC /* Products */,
 			);
@@ -131,13 +131,13 @@
 			path = TrackerCell;
 			sourceTree = "<group>";
 		};
-		05F465A02B283C10000D58DC /* Statistic */ = {
+		05F465A02B283C10000D58DC /* Helper */ = {
 			isa = PBXGroup;
 			children = (
 				05F465A12B283C36000D58DC /* StaticViewController.swift */,
 				05F465A32B283C4A000D58DC /* Constants.swift */,
 			);
-			path = Statistic;
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		05F465A52B283C55000D58DC /* Components */ = {
