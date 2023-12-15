@@ -5,7 +5,7 @@
 //  Created by TATIANA VILDANOVA on 12.12.2023.
 //
 
-import Foundation
+import UIKit
 
 final class Button: UIButton {
     convenience init(color: UIColor = .black, title: String) {

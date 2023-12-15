@@ -1,11 +1,7 @@
-//
-//  ListItem.swift
-//  Tracker
-//
 //  Created by TATIANA VILDANOVA on 12.12.2023.
 //
 
-import Foundation
+import UIKit
 
 final class ListItem: UIView {
     private let border: UIView = {

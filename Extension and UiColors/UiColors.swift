@@ -1,11 +1,7 @@
-//
-//  UiColors.swift
-//  Tracker
-//
 //  Created by TATIANA VILDANOVA on 12.12.2023.
 //
 
-import Foundation
+import UIKit
 
 extension UIColor {
     static let background = UIColor(named: "Background")!

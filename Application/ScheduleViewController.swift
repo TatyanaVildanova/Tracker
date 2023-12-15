@@ -5,7 +5,7 @@
 //  Created by TATIANA VILDANOVA on 12.12.2023.
 //
 
-import Foundation
+import UIKit
 
 protocol ScheduleViewControllerDelegate: AnyObject {
     func didConfirm(_ schedule: [Weekday])

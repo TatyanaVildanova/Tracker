@@ -89,13 +89,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		059FEE062B2C31B100AB6D4B /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				05F4657E2B2839FD000D58DC /* AppDelegate.swift */,
+				05F465802B2839FD000D58DC /* SceneDelegate.swift */,
+				05F465842B2839FD000D58DC /* Main.storyboard */,
+				05F465872B2839FE000D58DC /* Assets.xcassets */,
+				05F465892B2839FE000D58DC /* LaunchScreen.storyboard */,
+				05F4658C2B2839FE000D58DC /* Info.plist */,
+				05F465C52B283E3A000D58DC /* ScheduleViewController.swift */,
+				05F465C72B283E4D000D58DC /* WeekDayCell.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		059FEE072B2C327500AB6D4B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				05F465A62B283C79000D58DC /* TrackerStruct.swift */,
+				05F465A82B283C8C000D58DC /* TrackerRecord.swift */,
+				05F465AA2B283CB0000D58DC /* TrackerCategory.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		05F465722B2839FD000D58DC = {
 			isa = PBXGroup;
 			children = (
+				05F465922B283B1A000D58DC /* TabBarController.swift */,
+				05F4657D2B2839FD000D58DC /* TrackerCell */,
+				059FEE062B2C31B100AB6D4B /* Application */,
 				05F465B82B283D49000D58DC /* Extension and UiColors */,
 				05F465A52B283C55000D58DC /* Components */,
 				05F465A02B283C10000D58DC /* Helper */,
-				05F4657D2B2839FD000D58DC /* TrackerCell */,
 				05F4657C2B2839FD000D58DC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -111,9 +138,6 @@
 		05F4657D2B2839FD000D58DC /* TrackerCell */ = {
 			isa = PBXGroup;
 			children = (
-				05F4657E2B2839FD000D58DC /* AppDelegate.swift */,
-				05F465802B2839FD000D58DC /* SceneDelegate.swift */,
-				05F465922B283B1A000D58DC /* TabBarController.swift */,
 				05F465822B2839FD000D58DC /* AddTrackerViewControllerDelegate.swift */,
 				05F465942B283B74000D58DC /* TrackerCell.swift */,
 				05F465962B283B94000D58DC /* TrackerViewController.swift */,
@@ -121,12 +145,6 @@
 				05F4659A2B283BD5000D58DC /* ListCell.swift */,
 				05F4659C2B283BE6000D58DC /* EmojiCell.swift */,
 				05F4659E2B283BF6000D58DC /* ColorCell.swift */,
-				05F465842B2839FD000D58DC /* Main.storyboard */,
-				05F465872B2839FE000D58DC /* Assets.xcassets */,
-				05F465892B2839FE000D58DC /* LaunchScreen.storyboard */,
-				05F4658C2B2839FE000D58DC /* Info.plist */,
-				05F465C52B283E3A000D58DC /* ScheduleViewController.swift */,
-				05F465C72B283E4D000D58DC /* WeekDayCell.swift */,
 			);
 			path = TrackerCell;
 			sourceTree = "<group>";
@@ -143,9 +161,7 @@
 		05F465A52B283C55000D58DC /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				05F465A62B283C79000D58DC /* TrackerStruct.swift */,
-				05F465A82B283C8C000D58DC /* TrackerRecord.swift */,
-				05F465AA2B283CB0000D58DC /* TrackerCategory.swift */,
+				059FEE072B2C327500AB6D4B /* Models */,
 				05F465AC2B283CD3000D58DC /* TrackerFormViewController.swift */,
 				05F465AE2B283CED000D58DC /* SelectionTitle.swift */,
 				05F465B02B283D01000D58DC /* ListItem.swift */,
@@ -298,7 +314,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -332,7 +348,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -346,8 +362,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = NO;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -361,7 +377,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -395,7 +411,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -403,8 +419,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = NO;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -422,7 +438,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QG29A57C4K;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Tracker/Info.plist;
+				INFOPLIST_FILE = Application/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -434,7 +450,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = TatyanaVildanova.Tracker.Tracker;
+				PRODUCT_BUNDLE_IDENTIFIER = TatyanaVildanova.Tracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -454,7 +470,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QG29A57C4K;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Tracker/Info.plist;
+				INFOPLIST_FILE = Application/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";

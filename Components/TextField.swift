@@ -5,7 +5,7 @@
 //  Created by TATIANA VILDANOVA on 12.12.2023.
 //
 
-import Foundation
+import UIKit
 
 final class TextField: UITextField {
     private let textPadding = UIEdgeInsets(
