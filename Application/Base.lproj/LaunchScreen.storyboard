@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +21,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" red="0.23441160214226242" green="0.40485982687958794" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" name="TrackerBlue"/>
                         <constraints>
                             <constraint firstItem="nTB-ch-nYn" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="pVy-qd-9Nj"/>
                             <constraint firstItem="nTB-ch-nYn" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="qhh-IA-OCV"/>
@@ -34,5 +35,8 @@
     </scenes>
     <resources>
         <image name="LogoLaunch" width="91" height="94"/>
+        <namedColor name="TrackerBlue">
+            <color red="0.21600000560283661" green="0.44699999690055847" blue="0.90600001811981201" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>
