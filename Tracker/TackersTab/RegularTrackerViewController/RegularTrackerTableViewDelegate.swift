@@ -39,3 +39,4 @@ final class RegularTrackerTableViewDelegate: NSObject & UITableViewDelegate {
         }
     }
 }
+

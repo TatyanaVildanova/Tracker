@@ -13,3 +13,4 @@ extension UIImage {
         static let statistics = UIImage(named: "StatsSelected") ?? UIImage(systemName: "hare.fill")!
     }
 }
+

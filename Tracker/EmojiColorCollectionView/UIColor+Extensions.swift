@@ -27,6 +27,15 @@ extension UIColor {
         static let colorSelection16 = UIColor(named: "TrackerColorSelection16") ?? .systemPurple
         static let colorSelection17 = UIColor(named: "TrackerColorSelection17") ?? .systemBlue
         static let colorSelection18 = UIColor(named: "TrackerColorSelection18") ?? .green
+        
+        static func colorSelections() -> [UIColor] {
+            [
+                colorSelection1, colorSelection2, colorSelection3, colorSelection4, colorSelection5, colorSelection6,
+                colorSelection7, colorSelection8, colorSelection9, colorSelection10, colorSelection11, colorSelection12,
+                colorSelection13, colorSelection14, colorSelection15, colorSelection16, colorSelection17, colorSelection18
+            ]
+        }
     }
 }
+
 

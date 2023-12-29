@@ -1,4 +1,3 @@
-
 import UIKit
 
 // MARK: - Regular Tracker TableViewDataSource Class
@@ -50,3 +49,4 @@ final class RegularTrackerTableViewDataSource: NSObject & UITableViewDataSource 
         return itemCell
     }
 }
+

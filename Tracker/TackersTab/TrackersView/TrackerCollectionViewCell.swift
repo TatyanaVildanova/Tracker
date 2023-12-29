@@ -1,11 +1,10 @@
-
 import UIKit
 
 // MARK: - Protocols
 
 protocol TrackerCollectionViewCellDelegate: AnyObject {
-    func getSelectedDate() -> Date?
-    func updateTrackers()
+    func getSelectedDate() -> Date
+    func reloadTrackersWithCategory()
     func completeTracker(id: UUID, at indexPath: IndexPath)
     func uncompleteTracker(id: UUID, at indexPath: IndexPath)
 }
@@ -128,6 +127,11 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     
     private func checkDate() {
         let selectedDate = delegate?.getSelectedDate() ?? Date()
+        let opacity: Float = selectedDate <= currentDate ?? Date() ? 1.0 : 0.3
+        
+        trackerView.layer.opacity = opacity
+        stackView.layer.opacity = opacity
+        
         appendDayButton.isEnabled = selectedDate <= currentDate ?? Date()
     }
     
@@ -233,3 +237,4 @@ private extension TrackerCollectionViewCell {
         ])
     }
 }
+

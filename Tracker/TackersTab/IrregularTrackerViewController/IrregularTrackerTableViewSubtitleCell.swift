@@ -41,4 +41,3 @@ final class IrregularTrackerTableViewSubtitleCell: UITableViewCell {
         accessoryType = .disclosureIndicator
     }
 }
-

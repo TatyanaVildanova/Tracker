@@ -1,4 +1,3 @@
-
 import Foundation
 
 struct GeometricParams {
@@ -20,4 +19,3 @@ struct GeometricParams {
         self.paddingWidth = leftInset + rightInset + CGFloat(cellCount - 1) * cellSpacing
     }
 }
-

@@ -1,4 +1,3 @@
-
 import UIKit
 
 // MARK: - Schedule TableViewDataSource Class
@@ -72,3 +71,4 @@ final class ScheduleTableViewDataSource: NSObject & UITableViewDataSource {
         }
     }
 }
+
