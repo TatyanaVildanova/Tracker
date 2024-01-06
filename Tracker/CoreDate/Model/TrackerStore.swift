@@ -1,220 +1,122 @@
+import UIKit
 import CoreData
 
-// MARK: - Error enumeration
-
-private enum TrackerStoreError: Error {
-    case decodingErrorInvalidId
-    case decodingErrorInvalidTitle
-    case decodingErrorInvalidColor
-    case decodingErrorInvalidEmoji
-    case decodingErrorInvalidSchedule
-}
-
-// MARK: - TrackerStoreUpdate structure
-
-struct TrackerStoreUpdate {
-    let insertedSections: IndexSet
-    let insertedIndexPaths: [IndexPath]
-}
-
-// MARK: - Protocols
-
 protocol TrackerStoreDelegate: AnyObject {
-    func didUpdate(_ update: TrackerStoreUpdate)
+    func store() -> Void
 }
-
-protocol TrackerStoreProtocol {
-    func setDelegate(_ delegate: TrackerStoreDelegate)
-    func getTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker
-    func addTracker(_ tracker: Tracker, with category: TrackerCategory) throws
-}
-
-// MARK: - TrackerStore class
 
 final class TrackerStore: NSObject {
-
-    // MARK: - Properties
-
-    private let context: NSManagedObjectContext
+    private var context: NSManagedObjectContext
+    private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>!
     private let uiColorMarshalling = UIColorMarshalling()
-
-    private var insertedSections: IndexSet = []
-    private var insertedIndexPaths: [IndexPath] = []
     
-    private lazy var trackerCategoryStore: TrackerCategoryStoreProtocol = {
-        TrackerCategoryStore(context: context)
-    }()
+    weak var delegate: TrackerStoreDelegate?
     
-    private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
-        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        let trackerDescriptor = NSSortDescriptor(keyPath: \TrackerCoreData.title, ascending: true)
-        let categoryDescriptor = NSSortDescriptor(keyPath: \TrackerCoreData.category?.title, ascending: false)
+    var trackers: [Tracker] {
+        guard
+            let objects = self.fetchedResultsController.fetchedObjects,
+            let trackers = try? objects.map({ try self.tracker(from: $0)})
+        else { return [] }
+        return trackers
+    }
+    
+    convenience override init() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).context
+        try! self.init(context: context)
+    }
+    
+    init(context: NSManagedObjectContext) throws {
+        self.context = context
+        super.init()
         
-        request.sortDescriptors = [trackerDescriptor, categoryDescriptor]
-        
+        let fetch = TrackerCoreData.fetchRequest()
+        fetch.sortDescriptors = [
+            NSSortDescriptor(keyPath: \TrackerCoreData.id, ascending: true)
+        ]
         let controller = NSFetchedResultsController(
-            fetchRequest: request,
+            fetchRequest: fetch,
             managedObjectContext: context,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
         controller.delegate = self
-        
-        try? controller.performFetch()
-        return controller
-    }()
-
-    var trackers: [Tracker] {
-        guard
-            let objects = self.fetchedResultsController.fetchedObjects,
-            let trackers = try? objects.map({ try self.getTracker(from: $0) })
-        else { return [] }
-        return trackers
+        self.fetchedResultsController = controller
+        try controller.performFetch()
     }
     
-    weak var delegate: TrackerStoreDelegate?
-
-    // MARK: - Initializers
-
-    convenience override init() {
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        self.init(context: context)
+    func addNewTracker(_ tracker: Tracker) throws {
+        let trackerCoreData = TrackerCoreData(context: context)
+        trackerCoreData.id = tracker.id
+        trackerCoreData.title = tracker.title
+        trackerCoreData.color = uiColorMarshalling.hexString(from: tracker.color)
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.schedule = tracker.schedule?.map {
+            $0.rawValue
+        }
+        trackerCoreData.colorIndex = Int16(tracker.colorIndex)
+        try context.save()
     }
-
-    init(context: NSManagedObjectContext) {
-        self.context = context
-        super.init()
-    }
-}
-
-// MARK: - Private methods
-
-private extension TrackerStore {
     
-    func saveContext() throws {
-        guard context.hasChanges else { return }
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw error
+    func updateTracker(_ tracker: Tracker, oldTracker: Tracker?) throws {
+        let updated = try fetchTracker(with: oldTracker)
+        guard let updated = updated else { return }
+        updated.title = tracker.title
+        updated.colorIndex = Int16(tracker.colorIndex)
+        updated.color = uiColorMarshalling.hexString(from: tracker.color)
+        updated.emoji = tracker.emoji
+        updated.schedule = tracker.schedule?.map {
+            $0.rawValue
         }
+        try context.save()
     }
-
-    func getTracker(from trackerCoreData: TrackerCoreData) throws -> Tracker {
-        guard let id = trackerCoreData.trackerId else {
-            throw TrackerStoreError.decodingErrorInvalidId
+    
+    func tracker(from trackerCoreData: TrackerCoreData) throws -> Tracker {
+        guard let id = trackerCoreData.id,
+              let emoji = trackerCoreData.emoji,
+              let color = uiColorMarshalling.color(from: trackerCoreData.color ?? ""),
+              let title = trackerCoreData.title,
+              let schedule = trackerCoreData.schedule
+        else {
+            fatalError()
         }
-
-        guard let title = trackerCoreData.title else {
-            throw TrackerStoreError.decodingErrorInvalidTitle
-        }
-
-        guard let colorString = trackerCoreData.color else {
-            throw TrackerStoreError.decodingErrorInvalidColor
-        }
-
-        guard let emoji = trackerCoreData.emoji else {
-            throw TrackerStoreError.decodingErrorInvalidEmoji
-        }
-
-        guard let scheduleString = trackerCoreData.schedule else {
-            throw TrackerStoreError.decodingErrorInvalidSchedule
-        }
-
-        let color = uiColorMarshalling.getColor(from: colorString)
-        let schedule = Weekday.getWeekday(from: scheduleString)
-        
         return Tracker(
             id: id,
             title: title,
             color: color,
             emoji: emoji,
-            schedule: schedule
+            schedule: schedule.map({ WeekDay(rawValue: $0)!}),
+            pinned: trackerCoreData.pinned,
+            colorIndex: Int(trackerCoreData.colorIndex)
         )
     }
-
-    func addNewTracker(_ tracker: Tracker, with category: TrackerCategory) throws {
-        let trackerCategoryCoreData = try trackerCategoryStore.fetchCategoryCoreData(for: category)
-        let trackerCoreData = TrackerCoreData(context: context)
-
-        trackerCoreData.trackerId = tracker.id
-        trackerCoreData.title = tracker.title
-        trackerCoreData.color = uiColorMarshalling.getHexString(from: tracker.color)
-        trackerCoreData.emoji = tracker.emoji
-        trackerCoreData.schedule = Weekday.getString(from: tracker.schedule)
-        trackerCoreData.category = trackerCategoryCoreData
-        
-        try saveContext()
+    
+    func deleteTracker(_ tracker: Tracker?) throws {
+        let toDelete = try fetchTracker(with: tracker)
+        guard let toDelete = toDelete else { return }
+        context.delete(toDelete)
+        try context.save()
+    }
+    
+    func pinTracker(_ tracker: Tracker?, value: Bool) throws {
+        let toPin = try fetchTracker(with: tracker)
+        guard let toPin = toPin else { return }
+        toPin.pinned = value
+        try context.save()
+    }
+    
+    func fetchTracker(with tracker: Tracker?) throws -> TrackerCoreData? {
+        guard let tracker = tracker else { fatalError() }
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        let result = try context.fetch(fetchRequest)
+        return result.first
     }
 }
 
-// MARK: - Protocol methods
-
-extension TrackerStore: TrackerStoreProtocol {
-    
-    func setDelegate(_ delegate: TrackerStoreDelegate) {
-        self.delegate = delegate
-    }
-    
-    func getTracker(_ trackerCoreData: TrackerCoreData) throws -> Tracker {
-        try getTracker(from: trackerCoreData)
-    }
-    
-    func addTracker(_ tracker: Tracker, with category: TrackerCategory) throws {
-        try addNewTracker(tracker, with: category)
-    }
-}
-
-// MARK: - FetchedResultsController methods
-
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
-
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        insertedSections.removeAll()
-        insertedIndexPaths.removeAll()
-    }
-
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate?.didUpdate(
-            TrackerStoreUpdate(
-                insertedSections: insertedSections,
-                insertedIndexPaths: insertedIndexPaths
-            )
-        )
-        
-        insertedSections.removeAll()
-        insertedIndexPaths.removeAll()
-    }
-
-    func controller(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
-        didChange sectionInfo: NSFetchedResultsSectionInfo,
-        atSectionIndex sectionIndex: Int,
-        for type: NSFetchedResultsChangeType
-    ) {
-        switch type {
-        case .insert:
-            insertedSections.insert(sectionIndex)
-        default:
-            break
-        }
-    }
-    
-    func controller(
-        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
-        didChange anObject: Any,
-        at indexPath: IndexPath?,
-        for type: NSFetchedResultsChangeType,
-        newIndexPath: IndexPath?
-    ) {
-        switch type {
-        case .insert:
-            if let indexPath = newIndexPath {
-                insertedIndexPaths.append(indexPath)
-            }
-        default:
-            break
-        }
+        delegate?.store()
     }
 }
+
