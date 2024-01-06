@@ -200,6 +200,8 @@
 				054E364D2B494AE10047844E /* LaunchScreen.storyboard */,
 				054E364F2B494B130047844E /* Assets.xcassets */,
 				054E364B2B494ADA0047844E /* Info.plist */,
+				054E36652B495D680047844E /* Localizable.strings */,
+				054E36702B495FF30047844E /* Localizable.stringsdict */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -223,8 +225,6 @@
 			isa = PBXGroup;
 			children = (
 				053D7DC82B36E1B800F307E5 /* Tracker */,
-				054E36702B495FF30047844E /* Localizable.stringsdict */,
-				054E36652B495D680047844E /* Localizable.strings */,
 				05F4657C2B2839FD000D58DC /* Products */,
 			);
 			sourceTree = "<group>";
