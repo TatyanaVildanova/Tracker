@@ -1,4 +1,4 @@
-  
+
 import UIKit
 
 final class CategoryViewController: UIViewController {
@@ -135,7 +135,7 @@ extension CategoryViewController: CategoryActions {
     }
     
     func reload() {
-        self.categoriesTableView.reloadData()
+        categoriesTableView.reloadData()
     }
 }
 
@@ -152,12 +152,12 @@ extension CategoryViewController: UITableViewDelegate {
         
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryCell {
             cell.done(with: UIImage(named: "Done") ?? UIImage())
-            viewModel.selectCategory(indexPath.row)
+            viewModel.selectCategory(at: indexPath.row)
             tableView.deselectRow(at: indexPath, animated: true)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -179,11 +179,11 @@ extension CategoryViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let category = self.viewModel.categories[indexPath.row]
-
+        
         let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let editAction = UIAction(title: "Редактировать") { [weak self] _ in
                 guard let self = self else { return }
-
+                
                 let createCategoryViewController = CreateCategoryViewController()
                 createCategoryViewController.categoryViewController = self
                 createCategoryViewController.editCategory(category, newHeader: "Редактирование категории")
@@ -194,9 +194,12 @@ extension CategoryViewController: UITableViewDelegate {
                 guard let self = self else { return }
                 
                 let alertController = UIAlertController(title: nil, message: "Эта категория точно не нужна?", preferredStyle: .actionSheet)
+                weak var weakSelf = self
+                
                 let deleteConfirmationAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
-                    try! self.trackerCategoryStore.deleteCategory(category)
-                    self.checkEmptyCategoriesScreen()
+                    guard let strongSelf = weakSelf else { return }
+                    try! strongSelf.trackerCategoryStore.deleteCategory(category)
+                    strongSelf.checkEmptyCategoriesScreen()
                     self.categoriesTableView.reloadData()
                 }
                 alertController.addAction(deleteConfirmationAction)

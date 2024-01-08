@@ -19,8 +19,7 @@ final class HabitViewController: UIViewController {
     private var selectedColorIndex: Int?
     private var selectedEmoji: String?
     private var selectedDays: [WeekDay] = []
-    private(set) var viewModel: CategoryViewModel = CategoryViewModel.shared
-    private var edit: Bool?
+    private var isEditMode: Bool?
 
     
     private let colors: [UIColor] = [
@@ -190,7 +189,7 @@ final class HabitViewController: UIViewController {
     
     init(edit: Bool) {
         super.init(nibName: nil, bundle: nil)
-        self.edit = edit
+        self.isEditMode = edit
     }
     
     required init?(coder: NSCoder) {
@@ -233,7 +232,7 @@ final class HabitViewController: UIViewController {
             createButton.leadingAnchor.constraint(equalTo: colorCollectionView.centerXAnchor, constant: 4)
         ])
         
-        if edit ?? false {
+        if isEditMode ?? false {
             scrollView.addSubview(dayCount)
             NSLayoutConstraint.activate([
                 dayCount.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 38),
@@ -270,7 +269,6 @@ final class HabitViewController: UIViewController {
             trackersViewController?.updateTracker(tracker: newTracker, oldTracker: updatedTracker, category: self.selectedCategory?.header)
         } else {
             trackersViewController?.appendTracker(tracker: newTracker, category: self.selectedCategory?.header)
-            viewModel.addTrackerToCategory(to: self.selectedCategory, tracker: newTracker)
         }
         trackersViewController?.reload()
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)

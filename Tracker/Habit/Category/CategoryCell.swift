@@ -35,15 +35,19 @@ final class CategoryCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        performCustomInitialization()
+    }
+    
+    func performCustomInitialization() {
+        assertionFailure("init(coder:) has not been implemented")
     }
     
     func update(with title: String) {
-         titleLabel.text = title
+        titleLabel.text = title
     }
     
     func done(with image: UIImage) {
         doneImage.image = image
     }
 }
-

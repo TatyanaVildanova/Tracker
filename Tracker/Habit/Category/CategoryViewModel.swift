@@ -2,7 +2,7 @@ import UIKit
 import CoreData
 
 final class CategoryViewModel {
-        
+    
     static let shared = CategoryViewModel()
     private var categoryStore = TrackerCategoryStore.shared
     private (set) var categories: [TrackerCategory] = []
@@ -16,7 +16,12 @@ final class CategoryViewModel {
     }
     
     func addCategory(_ toAdd: String) {
-        try! self.categoryStore.addNewCategory(TrackerCategory(header: toAdd, trackers: []))
+        do {
+            try
+            self.categoryStore.addNewCategory(TrackerCategory(header: toAdd, trackers: []))
+        } catch {
+            print("Произошла ошибка при добавлении категории: \(error)")
+        }
     }
     
     func updateCategory(category: TrackerCategory?, header: String) {
@@ -27,8 +32,8 @@ final class CategoryViewModel {
         try! self.categoryStore.addTrackerToCategory(to: category, tracker: tracker)
     }
     
-    func selectCategory(_ at: Int) {
-        self.selectedCategory = self.categories[at]
+    func selectCategory(at index: Int) {
+        self.selectedCategory = self.categories[index]
     }
 }
 
