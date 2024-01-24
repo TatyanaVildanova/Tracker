@@ -86,4 +86,3 @@ final class StatisticCell: UITableViewCell {
         countLabel.text = count
     }
 }
-
