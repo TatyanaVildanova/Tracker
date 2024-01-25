@@ -24,6 +24,8 @@
 		0540A0DA2B61842F0089BC19 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 0540A0D92B61842F0089BC19 /* SnapshotTesting */; };
 		0540A0DC2B61995F0089BC19 /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 0540A0DB2B61995F0089BC19 /* InlineSnapshotTesting */; };
 		0540A0DE2B619BE30089BC19 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0540A0DD2B619BE30089BC19 /* Analytics.swift */; };
+		0540A0E12B61BBA90089BC19 /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0540A0E02B61BBA90089BC19 /* FiltersViewController.swift */; };
+		0540A0E32B61BBCD0089BC19 /* FilersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0540A0E22B61BBCD0089BC19 /* FilersTableViewCell.swift */; };
 		054E36112B3F60190047844E /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054E36102B3F60190047844E /* HabitViewController.swift */; };
 		054E36132B3F602D0047844E /* HabitViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054E36122B3F602D0047844E /* HabitViewCell.swift */; };
 		054E36152B3F60500047844E /* HabitEmojiHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054E36142B3F60500047844E /* HabitEmojiHeader.swift */; };
@@ -82,6 +84,8 @@
 		0540A0CE2B6182F80089BC19 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0540A0D02B6182F80089BC19 /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
 		0540A0DD2B619BE30089BC19 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		0540A0E02B61BBA90089BC19 /* FiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
+		0540A0E22B61BBCD0089BC19 /* FilersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilersTableViewCell.swift; sourceTree = "<group>"; };
 		054E36102B3F60190047844E /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
 		054E36122B3F602D0047844E /* HabitViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewCell.swift; sourceTree = "<group>"; };
 		054E36142B3F60500047844E /* HabitEmojiHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitEmojiHeader.swift; sourceTree = "<group>"; };
@@ -164,6 +168,7 @@
 		053D7DC82B36E1B800F307E5 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				0540A0DF2B61BB7E0089BC19 /* Filters */,
 				05F465922B283B1A000D58DC /* TabBarController.swift */,
 				054E36512B494B7F0047844E /* Application */,
 				054E362D2B488A000047844E /* Onboarding */,
@@ -206,6 +211,15 @@
 				D27673BEA9AB839CE3119710 /* Pods_TrackerTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0540A0DF2B61BB7E0089BC19 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				0540A0E02B61BBA90089BC19 /* FiltersViewController.swift */,
+				0540A0E22B61BBCD0089BC19 /* FilersTableViewCell.swift */,
+			);
+			path = Filters;
 			sourceTree = "<group>";
 		};
 		054E36062B3F5A0A0047844E /* Domain */ = {
@@ -534,6 +548,7 @@
 				05F465AD2B283CD3000D58DC /* TrackerStructures.swift in Sources */,
 				054E361B2B3F60BE0047844E /* UIColorMarshalling.swift in Sources */,
 				053D7DBB2B36DB5C00F307E5 /* StatisticsViewController.swift in Sources */,
+				0540A0E32B61BBCD0089BC19 /* FilersTableViewCell.swift in Sources */,
 				05F465B12B283D01000D58DC /* TrackerCell.swift in Sources */,
 				053D7DA92B36D8CD00F307E5 /* CategoryViewController.swift in Sources */,
 				053D7DAB2B36D90300F307E5 /* CategoryCell.swift in Sources */,
@@ -545,6 +560,7 @@
 				05F465AF2B283CED000D58DC /* TrackersViewController.swift in Sources */,
 				053D7DAF2B36D93900F307E5 /* Observable.swift in Sources */,
 				053D7DBF2B36DBD500F307E5 /* HabitColorCell.swift in Sources */,
+				0540A0E12B61BBA90089BC19 /* FiltersViewController.swift in Sources */,
 				054E362F2B488A3D0047844E /* OnboardingViewController.swift in Sources */,
 				05F465B52B283D30000D58DC /* PreviewViewController.swift in Sources */,
 				054E36292B3F67240047844E /* StatisticCell.swift in Sources */,
