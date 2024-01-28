@@ -1,35 +1,21 @@
 
+import Foundation
 import UIKit
 
-final class TabBarController: UITabBarController {
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-                
-        let trackersVC = TrackersViewController()
-        let trackersViewController = UINavigationController(rootViewController: trackersVC)
-        trackersViewController.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("app.title", comment: ""),
-            image: UIImage(named: "Trackers"),
-            selectedImage: nil
-        )
+final class TabBarViewController: UITabBarController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        let statisticViewController = StatisticViewController()
-        statisticViewController.trackersViewController = trackersVC
-        statisticViewController.tabBarItem = UITabBarItem(
-            title: NSLocalizedString("statistic.title", comment: ""),
-            image: UIImage(named: "Stats"),
-            selectedImage: nil
-        )
+        let trackerViewController = TrackersViewController()
+        trackerViewController.tabBarItem = UITabBarItem(
+            title: NSLocalizedString("trackers", comment: ""), image: UIImage(named: "trackersTabBar"), selectedImage: nil)
         
-        self.viewControllers = [trackersViewController, statisticViewController]
+        let statisticsViewController = StatisticsViewController()
+        statisticsViewController.tabBarItem = UITabBarItem(
+            title: NSLocalizedString("statistics", comment: ""), image: UIImage(named: "statisticsTabBar"), selectedImage: nil)
         
-        let separatorImage = UIImage()
-
-        self.tabBar.shadowImage = separatorImage
-        self.tabBar.backgroundImage = separatorImage
-        self.tabBar.layer.borderWidth = 0.50
-        self.tabBar.clipsToBounds = true
+        self.viewControllers = [trackerViewController, statisticsViewController]
+        
+        
     }
 }
-
