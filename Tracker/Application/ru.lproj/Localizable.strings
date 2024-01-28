@@ -5,7 +5,16 @@
   Created by TATIANA VILDANOVA on 06.01.2024.
   
 */
-
-app.title = "Трекеры";
-filter.title = "Фильтры";
-statistic.title = "Статистика";
+"trackers" = "Трекеры";
+"emptyState.title" = "Что будем отслеживать?";
+"statistics" = "Статистика";
+"filters" = "Фильтры";
+"search" = "Поиск";
+"day.one" = "день";
+"day.singular" = "дня";
+"day.plural" = "дней";
+"pinned" = "Закрепленные";
+"pin" = "Закрепить";
+"unpin" = "Открепить";
+"delete" = "Удалить";
+"edit" = "Редактировать";

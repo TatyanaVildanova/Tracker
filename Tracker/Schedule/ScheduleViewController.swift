@@ -1,180 +1,119 @@
-
+import Foundation
 import UIKit
 
-protocol SelectedDays {
-    func save(indicies: [Int])
+protocol ScheduleViewControllerDelegate: AnyObject {
+    func didSelectSchedule(days: [Weekday])
 }
 
-final class ScheduleViewController: UIViewController {
+class ScheduleViewController: UIViewController {
+    weak var delegate: ScheduleViewControllerDelegate?
     
-    let scheduleCellReuseIdentifier = "ScheduleTableViewCell"
-    var createTrackerViewController: SelectedDays?
+    private var weekday = Weekday.allCases
+    private var selectedSchedule: [Weekday] = []
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        prepareView()
+    }
     
-    private let header: UILabel = {
-        let header = UILabel()
-        header.translatesAutoresizingMaskIntoConstraints = false
-        header.text = "Расписание"
-        header.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        header.textColor = .ypBlackDay
-        return header
+    private let titleLabel: UILabel =  {
+        let label = UILabel()
+        label.text = "Расписание"
+        label.textColor = .black
+        label.font = UIFont(name: "SFProText-Medium", size: 16)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
-    private let scheduleTableView: UITableView = {
+    private var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.layer.cornerRadius = 16
+        tableView.backgroundColor = UIColor(named: "YPLightGray")
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
-    private lazy var doneScheduleButton: UIButton = {
-        let doneScheduleButton = UIButton(type: .custom)
-        doneScheduleButton.setTitleColor(.ypWhiteDay, for: .normal)
-        doneScheduleButton.backgroundColor = .ypBlackDay
-        doneScheduleButton.layer.cornerRadius = 16
-        doneScheduleButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        doneScheduleButton.setTitle("Готово", for: .normal)
-        doneScheduleButton.addTarget(self, action: #selector(doneScheduleButtonTapped), for: .touchUpInside)
-        doneScheduleButton.translatesAutoresizingMaskIntoConstraints = false
-        return doneScheduleButton
+    private lazy var doneButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Готово", for: .normal)
+        button.titleLabel?.font = UIFont(name: "SFProText-Medium", size: 16)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(named: "YPBlack")
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .ypWhiteDay
-        addSubviews()
-        
-        scheduleTableView.delegate = self
-        scheduleTableView.dataSource = self
-        scheduleTableView.register(ScheduleViewCell.self, forCellReuseIdentifier: scheduleCellReuseIdentifier)
-        scheduleTableView.layer.cornerRadius = 16
-        scheduleTableView.separatorStyle = .none
+    private func prepareView() {
+        view.addSubview(titleLabel)
+        view.addSubview(doneButton)
+        view.addSubview(tableView)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = UIColor(named: "YPLightGray")
         
         NSLayoutConstraint.activate([
-            view.topAnchor.constraint(equalTo: view.topAnchor),
-            view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            header.topAnchor.constraint(equalTo: view.topAnchor, constant: 26),
-            header.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scheduleTableView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 30),
-            scheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            scheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            scheduleTableView.heightAnchor.constraint(equalToConstant: 525),
-            doneScheduleButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            doneScheduleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            doneScheduleButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
-            doneScheduleButton.heightAnchor.constraint(equalToConstant: 60)
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
+            titleLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            tableView.heightAnchor.constraint(equalToConstant: 525),
+            
+            doneButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            doneButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -34),
+            doneButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
-    private func addSubviews() {
-        view.addSubview(header)
-        view.addSubview(scheduleTableView)
-        view.addSubview(doneScheduleButton)
-    }
-    
-    @objc private func doneScheduleButtonTapped() {
-        var selected: [Int] = []
-        for (index, elem) in scheduleTableView.visibleCells.enumerated() {
-            guard let cell = elem as? ScheduleViewCell else {
-                return
-            }
-            if cell.selectedDay {
-                selected.append(index)
-            }
+    @objc func doneButtonTapped() {
+        print("done button tapped")
+        print(selectedSchedule)
+        if delegate != nil {
+            print("yes")
         }
-        self.createTrackerViewController?.save(indicies: selected)
+        delegate?.didSelectSchedule(days: selectedSchedule)
         dismiss(animated: true)
     }
 }
 
-// MARK: - UITableViewDelegate
-extension ScheduleViewController: UITableViewDelegate {
+extension ScheduleViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = weekday[indexPath.row].rawValue
+        cell.textLabel?.font = UIFont(name: "SFProText-Regular", size: 17)
+        let switchBar = UISwitch()
+        switchBar.tag = indexPath.row
+        switchBar.onTintColor = UIColor(named: "YPBlue")
+        switchBar.addTarget(self, action: #selector(switchBarDidTapped), for: .valueChanged)
+        cell.accessoryView = switchBar
+        cell.backgroundColor = .clear
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return weekday.count
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let separatorInset: CGFloat = 16
-        let separatorWidth = tableView.bounds.width - separatorInset * 2
-        let separatorHeight: CGFloat = 1.0
-        let separatorX = separatorInset
-        let separatorY = cell.frame.height - separatorHeight
-        
-        let isLastCell = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
-        
-        if !isLastCell {
-            let separatorView = UIView(frame: CGRect(x: separatorX, y: separatorY, width: separatorWidth, height: separatorHeight))
-            separatorView.backgroundColor = .ypGray
-            cell.addSubview(separatorView)
+    @objc func switchBarDidTapped(_ sender: UISwitch) {
+        if sender.isOn {
+            selectedSchedule.append(Weekday.allCases[sender.tag])
+        } else {
+            selectedSchedule.removeAll {$0 == Weekday.allCases[sender.tag]}
         }
     }
+}
+extension ScheduleViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        scheduleTableView.deselectRow(at: indexPath, animated: true)
-    }
 }
 
-// MARK: - UITableViewDataSource
-extension ScheduleViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: scheduleCellReuseIdentifier, for: indexPath) as? ScheduleViewCell else { return UITableViewCell() }
-        
-        let dayOfWeek = WeekDay.allCases[indexPath.row]
-        cell.update(with: "\(dayOfWeek.name)")
-        
-        return cell
-    }
-}
-
-enum WeekDay: Int, CaseIterable {
-    case monday = 2
-    case tuesday = 3
-    case wednesday = 4
-    case thursday = 5
-    case friday = 6
-    case saturday = 7
-    case sunday = 1
-    
-    var name: String {
-        switch self {
-        case .monday:
-            return "Понедельник"
-        case .tuesday:
-            return "Вторник"
-        case .wednesday:
-            return "Среда"
-        case .thursday:
-            return "Четверг"
-        case .friday:
-            return "Пятница"
-        case .saturday:
-            return "Суббота"
-        case .sunday:
-            return "Воскресенье"
-        }
-    }
-    
-    var shortName: String {
-        switch self {
-        case .monday:
-            return "Пн"
-        case .tuesday:
-            return "Вт"
-        case .wednesday:
-            return "Ср"
-        case .thursday:
-            return "Чт"
-        case .friday:
-            return "Пт"
-        case .saturday:
-            return "Сб"
-        case .sunday:
-            return "Вс"
-        }
-    }
-}

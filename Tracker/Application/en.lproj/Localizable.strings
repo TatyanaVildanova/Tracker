@@ -5,6 +5,16 @@
   Created by TATIANA VILDANOVA on 06.01.2024.
   
 */
-app.title = "Trackers";
-filter.title = "Filters";
-statistic.title = "Statistic";
+"trackers" = "Trackers";
+"emptyState.title" = "What will we track?";
+"statistics" = "Statistics";
+"filters" = "Filters";
+"search" = "Search";
+"day.one" = "day";
+"day.singular" = "day";
+"day.plural" = "days";
+"pinned" = "Pinned";
+"pin" = "Pin";
+"unpin" = "Unpin";
+"delete" = "Delete";
+"edit" = "Edit";
