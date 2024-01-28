@@ -41,7 +41,7 @@
 		054E366E2B495FF30047844E /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 054E36702B495FF30047844E /* Localizable.stringsdict */; };
 		05F465932B283B1A000D58DC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F465922B283B1A000D58DC /* TabBarController.swift */; };
 		05F465A22B283C36000D58DC /* HabitColorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F465A12B283C36000D58DC /* HabitColorHeader.swift */; };
-		05F465AD2B283CD3000D58DC /* TrackerStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F465AC2B283CD3000D58DC /* TrackerStructures.swift */; };
+		05F465AD2B283CD3000D58DC /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F465AC2B283CD3000D58DC /* Tracker.swift */; };
 		05F465AF2B283CED000D58DC /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F465AE2B283CED000D58DC /* TrackersViewController.swift */; };
 		05F465B12B283D01000D58DC /* TrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F465B02B283D01000D58DC /* TrackerCell.swift */; };
 		05F465B52B283D30000D58DC /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F465B42B283D30000D58DC /* PreviewViewController.swift */; };
@@ -89,7 +89,7 @@
 		05F4657B2B2839FD000D58DC /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05F465922B283B1A000D58DC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		05F465A12B283C36000D58DC /* HabitColorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitColorHeader.swift; sourceTree = "<group>"; };
-		05F465AC2B283CD3000D58DC /* TrackerStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStructures.swift; sourceTree = "<group>"; };
+		05F465AC2B283CD3000D58DC /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		05F465AE2B283CED000D58DC /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		05F465B02B283D01000D58DC /* TrackerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCell.swift; sourceTree = "<group>"; };
 		05F465B42B283D30000D58DC /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
@@ -145,7 +145,7 @@
 		053D7DC92B36E1E100F307E5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				05F465AC2B283CD3000D58DC /* TrackerStructures.swift */,
+				05F465AC2B283CD3000D58DC /* Tracker.swift */,
 				05F465AE2B283CED000D58DC /* TrackersViewController.swift */,
 				05F465B42B283D30000D58DC /* PreviewViewController.swift */,
 				05F465B02B283D01000D58DC /* TrackerCell.swift */,
@@ -351,7 +351,7 @@
 				054E364A2B494AC90047844E /* AppDelegate.swift in Sources */,
 				05F465A22B283C36000D58DC /* HabitColorHeader.swift in Sources */,
 				05F465932B283B1A000D58DC /* TabBarController.swift in Sources */,
-				05F465AD2B283CD3000D58DC /* TrackerStructures.swift in Sources */,
+				05F465AD2B283CD3000D58DC /* Tracker.swift in Sources */,
 				054E361B2B3F60BE0047844E /* UIColorMarshalling.swift in Sources */,
 				053D7DBB2B36DB5C00F307E5 /* StatisticsViewController.swift in Sources */,
 				05F465B12B283D01000D58DC /* TrackerCell.swift in Sources */,
