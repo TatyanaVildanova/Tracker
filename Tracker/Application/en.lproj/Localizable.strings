@@ -5,16 +5,22 @@
   Created by TATIANA VILDANOVA on 06.01.2024.
   
 */
-"trackers" = "Trackers";
-"emptyState.title" = "What will we track?";
-"statistics" = "Statistics";
-"filters" = "Filters";
-"search" = "Search";
-"day.one" = "day";
-"day.singular" = "day";
-"day.plural" = "days";
-"pinned" = "Pinned";
-"pin" = "Pin";
-"unpin" = "Unpin";
-"delete" = "Delete";
-"edit" = "Edit";
+"trackersHeaderTitle" = "Trackers";
+"searchText" = "Search";
+"emptyCollectionText" = "What will we track?";
+"emptyDayText" = "There're no tasks for this day";
+"emptySearchText" = "Nothing found";
+"filtersButton" = "Filters";
+"pinnedHeader" = "Pinned";
+"pinMenu" = "Pin";
+"unpinMenu" = "Unpin";
+"editMenu" = "Edit";
+"deleteMenu" = "Delete";
+"deleteMenuMessage" = "Are you sure?";
+"cancelMenu" = "Cancel";
+"tabTrackers" = "Trackers";
+"tabStatistics" = "Statistics";
+"day" = "%d day";
+"days" = "%d days";
+"manydays" = "%d days";
+

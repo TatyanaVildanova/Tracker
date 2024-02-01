@@ -1,151 +1,86 @@
-import Foundation
+
 import UIKit
 import CoreData
 
 protocol TrackerRecordStoreDelegate: AnyObject {
-    func didUpdateRecord(_ records: [TrackerRecord])
+    func storeRecordsDidUpdate(_ store: TrackerRecordStore)
 }
 
-final class TrackerRecordStore: NSObject, NSFetchedResultsControllerDelegate {
+final class TrackerRecordStore: NSObject {
     
-    private let context: NSManagedObjectContext
-    private let trackerStore = TrackerStore()
-    var completedTrackers: [TrackerRecord] {
-        try? fetchResultsController.performFetch()
-        guard let fetchObjects = fetchResultsController.fetchedObjects,
-              let trackersRecords = try? fetchObjects.map ({try makeRecord(from: $0)}) else { return [] }
-        return trackersRecords
-        
-    }
+    static let shared = TrackerRecordStore()
+    
+    private var context: NSManagedObjectContext
+    private var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData>!
+    
     weak var delegate: TrackerRecordStoreDelegate?
     
+    var trackerRecords: [TrackerRecord] {
+        guard
+            let objects = self.fetchedResultsController.fetchedObjects,
+            let records = try? objects.map({ try self.record(from: $0)})
+        else { return [] }
+        return records
+    }
+    
     convenience override init() {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let context = (UIApplication.shared.delegate as! AppDelegate).context
         try! self.init(context: context)
     }
+    
     init(context: NSManagedObjectContext) throws {
         self.context = context
         super.init()
-    }
-    private lazy var fetchResultsController: NSFetchedResultsController<TrackerRecordCoreData> = {
-        let fetchRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(keyPath: \TrackerRecordCoreData.recordId , ascending: true)
+        
+        let fetch = TrackerRecordCoreData.fetchRequest()
+        fetch.sortDescriptors = [
+            NSSortDescriptor(keyPath: \TrackerRecordCoreData.id, ascending: true)
         ]
         let controller = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
+            fetchRequest: fetch,
             managedObjectContext: context,
             sectionNameKeyPath: nil,
             cacheName: nil
         )
         controller.delegate = self
-        try? controller.performFetch()
-        return controller
-    }()
+        self.fetchedResultsController = controller
+        try controller.performFetch()
+    }
     
-    func addRecord(record: TrackerRecord) throws {
-        let trackerCoreData = try trackerStore.getTrackerCoreData(with: record.id)
+    func addNewTrackerRecord(_ trackerRecord: TrackerRecord) throws {
         let trackerRecordCoreData = TrackerRecordCoreData(context: context)
-        trackerRecordCoreData.recordId = record.id.uuidString
-        trackerRecordCoreData.date = record.date.removeTimeStamp!
-        trackerRecordCoreData.trackers = trackerCoreData
-        trackerCoreData?.addToRecord(trackerRecordCoreData)
+        trackerRecordCoreData.id = trackerRecord.trackerId
+        trackerRecordCoreData.date = trackerRecord.date
         try context.save()
     }
     
-    func deleteRecord(record: TrackerRecord) throws {
-        let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        request.predicate = NSPredicate(
-            format: "%K == %@",
-            #keyPath(TrackerRecordCoreData.recordId), record.id.uuidString)
-        let records = try context.fetch(request)
-        guard let recordToRemove = records.first else { return }
-        context.delete(recordToRemove)
-//        completedTrackers.remove(record)
+    func removeTrackerRecord(_ trackerRecord: TrackerRecord?) throws {
+        guard let toDelete = try self.fetchTrackerRecord(with: trackerRecord)
+        else { fatalError() }
+        context.delete(toDelete)
         try context.save()
-        
     }
     
-    func getRecordDone(tracker: Tracker, date: Date) throws -> Bool {
-        let request = fetchResultsController.fetchRequest
-        request.predicate = NSPredicate(format: "%K == %@ AND %K == %@",
-                                        #keyPath(TrackerRecordCoreData.recordId),
-                                        tracker.id.uuidString,
-                                        #keyPath(TrackerRecordCoreData.date),
-                                        date as NSDate)
-        do {
-            let trackerCoreData = try context.fetch(request)
-            print("trackerCoreData \(trackerCoreData)")
-            if !trackerCoreData.isEmpty {
-                if !trackerCoreData[0].recordId!.isEmpty {
-                    return true
-                } else {
-                    return false
-                }
-            } else {
-                return false
-            }
-        } catch {
-           throw StoreError.decodingErrorInvalidTracker
-       }
+    func record(from trackerRecordCoreData: TrackerRecordCoreData) throws -> TrackerRecord {
+        guard let id = trackerRecordCoreData.id,
+              let date = trackerRecordCoreData.date
+        else { fatalError() }
+        return TrackerRecord(trackerId: id, date: date)
     }
     
-    func trackerRecord(tracker: Tracker) throws -> TrackerRecord {
-        let request = fetchResultsController.fetchRequest
-        request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(TrackerRecordCoreData.recordId),
-                                        tracker.id.uuidString)
-        do {
-            let trackerCoreData = try context.fetch(request)
-            print("tracker \(tracker)")
-            let tracker = try makeRecord(from: trackerCoreData[0])
-            return tracker
-        } catch {
-           throw StoreError.decodingErrorInvalidTracker
-       }
+    func fetchTrackerRecord(with trackerRecord: TrackerRecord?) throws -> TrackerRecordCoreData? {
+        guard let trackerRecord = trackerRecord else { fatalError() }
+        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@ AND date == %@", trackerRecord.trackerId as CVarArg, trackerRecord.date as NSDate)
+        let result = try context.fetch(fetchRequest)
+        return result.first
     }
-    
-    
-    func makeRecord(from coreData: TrackerRecordCoreData) throws -> TrackerRecord {
-            guard
-                let stringId = coreData.recordId,
-                let id = UUID(uuidString: stringId),
-                let date = coreData.date
-            else { throw StoreError.decodingErrorInvalidTracker }
-            return TrackerRecord(
-                id: id,
-                date: date)
-        }
-    
-    func loadCompletedTrackers(date: Date) throws -> [TrackerRecord] {
-        let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        let trackersCoreData = try context.fetch(request)
-        guard let trackersRecords = try? trackersCoreData.map ({try makeRecord(from: $0)}) else { return [] }
-        return trackersRecords
-    }
-    
-    func getDaysCountDone(tracker: Tracker, date: Date) throws -> Int {
-        let request = fetchResultsController.fetchRequest
-        request.predicate = NSPredicate(format: "%K == %@",
-                                        #keyPath(TrackerRecordCoreData.recordId),
-                                        tracker.id.uuidString)
-        do {
-            let tracker = try context.fetch(request)
-            print("tracker \(tracker)")
-            return tracker.count
-        } catch {
-           throw StoreError.decodingErrorInvalidTracker
-       }
-    }
-    
-    func getCompletedTrackersCount() throws -> Int {
-        let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-        let recordsCoreData = try context.fetch(request)
-        var completedTrackersID: [String] = []
-        for r in recordsCoreData {
-            completedTrackersID.append(r.recordId!)
-        }
-        return completedTrackersID.count
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        delegate?.storeRecordsDidUpdate(self)
     }
 }
 

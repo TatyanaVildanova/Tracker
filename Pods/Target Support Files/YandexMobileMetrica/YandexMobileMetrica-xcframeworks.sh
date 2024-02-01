@@ -153,6 +153,6 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/YandexMobileMetrica/static/YandexMobileMetrica.xcframework" "YandexMobileMetrica/Static/Core" "framework" "ios-arm64_armv7" "ios-arm64_i386_x86_64-simulator"
-install_xcframework "${PODS_ROOT}/YandexMobileMetrica/static/YandexMobileMetricaCrashes.xcframework" "YandexMobileMetrica/Static/Crashes" "framework" "ios-arm64_armv7" "ios-arm64_i386_x86_64-simulator"
+install_xcframework "${PODS_ROOT}/YandexMobileMetrica/dynamic/YandexMobileMetrica.xcframework" "YandexMobileMetrica/Dynamic/Core" "framework" "ios-arm64_armv7" "ios-arm64_i386_x86_64-simulator"
+install_xcframework "${PODS_ROOT}/YandexMobileMetrica/dynamic/YandexMobileMetricaCrashes.xcframework" "YandexMobileMetrica/Dynamic/Crashes" "framework" "ios-arm64_armv7" "ios-arm64_i386_x86_64-simulator"
 

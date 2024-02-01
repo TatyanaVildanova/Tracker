@@ -1,95 +1,75 @@
-import Foundation
 import UIKit
 
-protocol AddTrackerViewControllerDelegate: AnyObject {
-    func didSaveTracker(tracker: Tracker, category: String, actionType: String)
-}
-
-class AddTrackerViewController: UIViewController{
-    weak var delegate: AddTrackerViewControllerDelegate?
+final class AddTrackerViewController: UIViewController {
     
-    private let titleLabel: UILabel =  {
-        let label = UILabel()
-        label.text = "Создание трекера"
-        label.textColor = .black
-        label.font = UIFont(name: "SFProText-Medium", size: 16)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var habitButton: UIButton = {
+    private let habitButton: UIButton = {
         let button = UIButton()
+        button.backgroundColor = .ypBlack
         button.setTitle("Привычка", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont(name: "SFProText-Medium", size: 16)
-        button.backgroundColor = UIColor(named: "YPBlack")
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
-        button.addTarget(self, action: #selector(habitButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    private lazy var eventButton: UIButton = {
+    private let eventButton: UIButton = {
         let button = UIButton()
+        button.backgroundColor = .ypBlack
         button.setTitle("Нерегулярное событие", for: .normal)
-        button.titleLabel?.font = UIFont(name: "SFProText-Medium", size: 16)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(named: "YPBlack")
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
-        button.addTarget(self, action: #selector(eventButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        prepareView()
+        view.backgroundColor = .ypWhite
+        
+        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 49))
+        navBar.barTintColor = .ypWhite
+        navBar.shadowImage = UIImage()
+        navBar.setBackgroundImage(UIImage(), for: .default)
+        view.addSubview(navBar)
+        let navTitle = UINavigationItem(title: "Создание трекера")
+        navBar.setItems([navTitle], animated: false)
+        
+        addSubviews()
     }
     
-    private func prepareView() {
-        view.addSubview(titleLabel)
+    private func addSubviews() {
+        habitButton.addTarget(self, action: #selector(habitButtonTapped), for: .touchUpInside)
+        eventButton.addTarget(self, action: #selector(eventButtonTapped), for: .touchUpInside)
+
+        habitButton.translatesAutoresizingMaskIntoConstraints = false
+        eventButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(habitButton)
         view.addSubview(eventButton)
-        
+
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 25),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            habitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             habitButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            habitButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            habitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            habitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            habitButton.widthAnchor.constraint(equalToConstant: 335),
             habitButton.heightAnchor.constraint(equalToConstant: 60),
             
             eventButton.topAnchor.constraint(equalTo: habitButton.bottomAnchor, constant: 16),
-            eventButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            eventButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            eventButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            eventButton.widthAnchor.constraint(equalToConstant: 335),
             eventButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
-    @objc func habitButtonTapped() {
-        print("addHabbitButton tapped")
-        let newHabbitViewController = NewTrackerViewController()
-        newHabbitViewController.delegate = self
-        newHabbitViewController.trackerType = "habbit"
-        present(newHabbitViewController, animated: true)
+    @objc private func habitButtonTapped() {
+        let modalVC = NewHabitViewController()
+        let navigationController = UINavigationController(rootViewController: modalVC)
+        navigationController.modalTransitionStyle = .coverVertical
+        present(navigationController, animated: true)
     }
-    @objc func eventButtonTapped() {
-        print("addEventButton tapped")
-        let newEventViewController = NewTrackerViewController()
-        newEventViewController.delegate = self
-        newEventViewController.trackerType = "event"
-        present(newEventViewController, animated: true)
+    
+    @objc private func eventButtonTapped() {
+        let modalVC = NewEventViewController()
+        let navigationController = UINavigationController(rootViewController: modalVC)
+        navigationController.modalTransitionStyle = .coverVertical
+        present(navigationController, animated: true)
     }
-}
-
-extension AddTrackerViewController: NewTrackerViewControllerDelegate {
-    func didSaveTracker(tracker: Tracker, category: String, actionType: String) {
-        dismiss(animated: true)
-        let tracker = tracker
-        let category = category
-        delegate?.didSaveTracker(tracker: tracker, category: category, actionType: actionType)
-    }
+    
 }
 
