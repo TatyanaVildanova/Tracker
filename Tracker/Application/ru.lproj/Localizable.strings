@@ -5,7 +5,22 @@
   Created by TATIANA VILDANOVA on 06.01.2024.
   
 */
+"trackersHeaderTitle" = "Трекеры";
+"searchText" = "Поиск";
+"emptyCollectionText" = "Что будем отслеживать?";
+"emptyDayText" = "На этот день задач нет";
+"emptySearchText" = "Ничего не найдено";
+"filtersButton" = "Фильтры";
+"pinnedHeader" = "Закрепленные";
+"pinMenu" = "Закрепить";
+"unpinMenu" = "Открепить";
+"editMenu" = "Редактировать";
+"deleteMenu" = "Удалить";
+"deleteMenuMessage" = "Уверены что хотите удалить трекер?";
+"cancelMenu" = "Отменить";
+"tabTrackers" = "Трекеры";
+"tabStatistics" = "Статистика";
+"day" = "%d день";
+"days" = "%d дня";
+"manydays" = "%d дней";
 
-app.title = "Трекеры";
-filter.title = "Фильтры";
-statistic.title = "Статистика";
